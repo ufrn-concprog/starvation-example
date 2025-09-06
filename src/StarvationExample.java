@@ -1,14 +1,9 @@
-import java.util.concurrent.locks.ReentrantLock;
-
 public class StarvationExample {
     public static void main(String[] args) {
-        ReentrantLock sharedLock = new ReentrantLock();
+        Object sharedLock = new Object();
 
-        Runnable highPriorityTask = new Task(sharedLock, "HighPriorityTask");
-        Runnable lowPriorityTask = new Task(sharedLock, "LowPriorityTask");
-
-        Thread t1 = new Thread(highPriorityTask);
-        Thread t2 = new Thread(lowPriorityTask);
+        Thread t1 = new Thread(new Task(sharedLock, "High Priority Task"));
+        Thread t2 = new Thread(new Task(sharedLock, "Low Priority Task"));
 
         t1.setPriority(Thread.MAX_PRIORITY);
         t2.setPriority(Thread.MIN_PRIORITY);
